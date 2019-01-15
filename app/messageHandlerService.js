@@ -54,6 +54,18 @@ class messageHandlerService {
         this._messager.send(channelID, `${weekDays[this._now().clone().add(1, 'days').weekday()]}:\r\n${announcementMessage}`);
     }
 
+    handleSubscribe(channelID) {
+        let result = this._alertService.addSubscriber(channelID);
+        let message = result ? 'This is the channel where ama bout to spam!' : 'This channel is already subscribed to alerts!';
+        this._messager.send(channelID, message);
+    }
+
+    handleMute(channelID) {
+        let result = this._alertService.removeSubscriber(channelID);
+        let message = result ? 'I ain\'t gonna spam here no more.' : 'This channel is not subscribed to alerts!';
+        this._messager.send(channelID, message);
+    }
+
     handleMessage(user, userID, channelID, message, evt) {
         // ignore self mesages
         if (userID === "397451898149535744")
@@ -76,12 +88,10 @@ class messageHandlerService {
                 this.handleTimeCommand(channelID);
                 break;
             case 'mute':
-                this._alertService.removeSubscriber(channelID);
-                this._messager.send(channelID, `I ain't gonna spam here no more.`);
+                this.handleMute(channelID);
                 break;
             case 'subscribe':
-                this._alertService.addSubscriber(channelID);
-                this._messager.send(channelID, `This is the channel where ama bout to spam!`);
+                this.handleSubscribe(channelID);
                 break;
             case 'weekDays':
                 this._messager.send(channelID, weekDays.join(', '));

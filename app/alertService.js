@@ -19,14 +19,20 @@ class alertService {
     }
 
     addSubscriber(channelId) {
-        if (!this._alertSubscribers.indexOf(channelId))
-            this._alertSubscribers.push(channelId);
+        if (!!this._alertSubscribers.indexOf(channelId))
+            return false;
+
+        this._alertSubscribers.push(channelId);
+        return true;
     }
 
     removeSubscriber(channelId) {
         let removeIndex = this._alertSubscribers.indexOf(channelId);
-        if (!!removeIndex)
-            this._alertSubscribers.splice(removeIndex, 1);
+        if (!removeIndex)
+            return false;
+
+        this._alertSubscribers.splice(removeIndex, 1);
+        return true;
     }
 
     getUpcomingBossAlerts() {
