@@ -19,7 +19,7 @@ class alertService {
     }
 
     addSubscriber(channelId) {
-        if (!!this._alertSubscribers.indexOf(channelId))
+        if (this._alertSubscribers.indexOf(channelId) === -1)
             return false;
 
         this._alertSubscribers.push(channelId);
@@ -28,7 +28,7 @@ class alertService {
 
     removeSubscriber(channelId) {
         let removeIndex = this._alertSubscribers.indexOf(channelId);
-        if (!removeIndex)
+        if (removeIndex === -1)
             return false;
 
         this._alertSubscribers.splice(removeIndex, 1);
