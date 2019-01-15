@@ -11,11 +11,12 @@ class messageHandlerService {
         this.availableCommands = [
             { command: 'help', displayName: '!help', description: 'Available commands.' },
             { command: 'time', displayName: '!time', description: 'Current bot time.' },
-            { command: 'setDefaultChannel', displayName: '!setDefaultChannel <channelId>', description: 'Set default channel Id where bot posts announcements.' },
             { command: 'weekDays', displayName: '!weekDays', description: 'Available week days.' },
             { command: 'today', displayName: '!b [today | td]', description: 'Displaying bosses for today commands.' },
             { command: 'tomorrow', displayName: '!b [tomorrow | tw]', description: 'Displaying bosses for tomorrow commands.' },
             { command: 'add', displayName: '!b add <weekDay> <time> <bossName>)', description: 'Appending new boss to boss\'.' },
+            { command: 'subscribe', displayName: '!subscribe)', description: 'Subscribes to boss alerts in this channel.' },
+            { command: 'mute', displayName: '!mute)', description: 'Muting alert bot in this channel.' },
         ];
 
         this._now = () => moment().tz("Europe/Moscow");
