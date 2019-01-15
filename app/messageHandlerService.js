@@ -15,8 +15,8 @@ class messageHandlerService {
             { command: 'today', displayName: '!b [today | td]', description: 'Displaying bosses for today commands.' },
             { command: 'tomorrow', displayName: '!b [tomorrow | tw]', description: 'Displaying bosses for tomorrow commands.' },
             { command: 'add', displayName: '!b add <weekDay> <time> <bossName>)', description: 'Appending new boss to boss\'.' },
-            { command: 'subscribe', displayName: '!subscribe)', description: 'Subscribes to boss alerts in this channel.' },
-            { command: 'mute', displayName: '!mute)', description: 'Muting alert bot in this channel.' },
+            { command: 'subscribe', displayName: '!subscribe', description: 'Subscribes to boss alerts in this channel.' },
+            { command: 'mute', displayName: '!mute', description: 'Muting alert bot in this channel.' },
         ];
 
         this._now = () => moment().tz("Europe/Moscow");
