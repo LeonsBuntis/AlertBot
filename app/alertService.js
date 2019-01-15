@@ -19,7 +19,7 @@ class alertService {
     }
 
     addSubscriber(channelId) {
-        if (this._alertSubscribers.indexOf(channelId) === -1)
+        if (this._alertSubscribers.indexOf(channelId) !== -1)
             return false;
 
         this._alertSubscribers.push(channelId);
