@@ -1,13 +1,15 @@
 const Discord = require('discord.io');
 const winston = require('winston');
 const moment = require('moment-timezone');
-const EventEmitter = require('events');
 
 const auth = require('./auth.json');
 
 const weekDays = require('./app/weekDays.js');
 const BossTimer = require('./app/BossTimer.js');
 const bossTimers = require('./app/bossTimers.js');
+const messageHanlder = require('./app/messageHandler.js');
+const alertService = require('./app/alertService.js');
+const messager = require('./app/messager.js');
 
 const logger = winston.createLogger({
     level: 'info',
@@ -29,10 +31,8 @@ const bot = new Discord.Client({
     autorun: true
 });
 
-var firstDelay = 20;
-var secondDelay = 10;
-
-var defaultChannelID = "534287393272889346";
+const _messager = new messager(logger, bot);
+const _alertService = new alertService(logger, _messager);
 
 bot.on('ready', function (evt) {
     handleReady(evt);
@@ -49,7 +49,6 @@ bot.on('disconnect', function (msg, code) {
     bot.connect();
 });
 
-const emitter = new EventEmitter();
 const now = () => moment().tz("Europe/Moscow");
 
 const availableCommands = [
@@ -63,64 +62,58 @@ const availableCommands = [
 ];
 
 const handleMessage = function (user, userID, channelID, message, evt) {
+    // ignore self mesages
     if (userID === "397451898149535744")
         return;
 
-    if (message.substring(0, 1) == '!') {
+    if (message.substring(0, 1) != '!')
+        return;
 
-        logger.info('Recieved message: ');
-        logger.info(message);
+    logger.info('Recieved message: ');
+    logger.info(message);
 
-        var args = message.substring(1).split(' ');
-        var cmd = args[0];
+    var args = message.substring(1).split(' ');
+    var cmd = args[0];
 
-        switch (cmd) {
-            case 'help':
-                handleHelpCommand(channelID);
-                break;
-            case 'time':
-                handleTimeCommand(channelID);
-                break;
-            case 'setDefaultChannel':
-                defaultChannelID = args[1];
-                bot.sendMessage({
-                    to: defaultChannelID,
-                    message: `This is the channel where ama bout to spam!`
-                }, (err, resp) => handleCallback(err, resp));
-                break;
-            case 'weekDays':
-                bot.sendMessage({
-                    to: channelID,
-                    message: weekDays.join(', ')
-                }, (err, resp) => handleCallback(err, resp));
-                break;
-            case 'b':
-                switch (args[1]) {
-                    case 'today':
-                    case 'td':
-                        handleTodayCommand(channelID);
-                        break;
-                    case 'tomorrow':
-                    case 'tw':
-                        handleTomorrowCommand(channelID);
-                        break;
-                    case 'add':
-                        addBoss(args[2], args[3], args[4]);
-                        bot.sendMessage({
-                            to: channelID,
-                            message: `Boss alert created for:\r\n${args[2]}, ${args[3]}, ${args[4]}`
-                        }, (err, resp) => handleCallback(err, resp));
-                        break;
-                    default:
-                        bot.sendMessage({
-                            to: channelID,
-                            message: 'Unrecognized command!'
-                        }, (err, resp) => handleCallback(err, resp));
-                        break;
-                }
-                break;
-        }
+    switch (cmd) {
+        case 'help':
+            handleHelpCommand(channelID);
+            break;
+        case 'time':
+            handleTimeCommand(channelID);
+            break;
+        case 'mute':
+            _alertService.removeSubscriber(channelID);
+            _messager.send(channelID, `I ain't gonna spam here no more.`);
+            break;
+        case 'subscribe':
+            _alertService.addSubscriber(channelID);
+            _messager.send(channelID, `This is the channel where ama bout to spam!`);
+            break;
+        case 'weekDays':
+            _messager.send(channelID, weekDays.join(', '));
+            break;
+        case 'b':
+            switch (args[1]) {
+                case 'today':
+                case 'td':
+                    handleTodayCommand(channelID);
+                    break;
+                case 'tomorrow':
+                case 'tw':
+                    handleTomorrowCommand(channelID);
+                    break;
+                case 'add':
+                    addBoss(args[2], args[3], args[4]);
+                    _messager.send(channelID, `Boss alert created for:\r\n${args[2]}, ${args[3]}, ${args[4]}`);
+                    break;
+                default:
+                    _messager.send(channelID, 'Unrecognized command!');
+                    break;
+            }
+            break;
     }
+
 };
 
 const handleHelpCommand = function (channelID) {
@@ -129,17 +122,11 @@ const handleHelpCommand = function (channelID) {
         .map(c => `${c.displayName} - ${c.description}`)
         .join('\r\n');
 
-    bot.sendMessage({
-        to: channelID,
-        message: message
-    }, (err, resp) => handleCallback(err, resp));
+    _messager.send(channelID, message);
 };
 
 const handleTimeCommand = function (channelID) {
-    bot.sendMessage({
-        to: channelID,
-        message: now()
-    }, (err, resp) => handleCallback(err, resp));
+    _messager.send(channelID, now());
 };
 
 const handleTodayCommand = function (channelID) {
@@ -147,10 +134,8 @@ const handleTodayCommand = function (channelID) {
         .filter(e => e.weekDay === now().weekday())
         .map(e => `${e.time.format('HH:mm')}, ${e.bossName}`)
         .join(',\r\n');
-    bot.sendMessage({
-        to: channelID,
-        message: `${weekDays[now().weekday()]}:\r\n${announcementMessage}`
-    }, (err, resp) => handleCallback(err, resp));
+
+    _messager.send(channelID, `${weekDays[now().weekday()]}:\r\n${announcementMessage}`);
 };
 
 const handleTomorrowCommand = function (channelID) {
@@ -158,24 +143,8 @@ const handleTomorrowCommand = function (channelID) {
         .filter(e => e.weekDay === now().clone().add(1, 'days').weekday())
         .map(e => `${e.time.format('HH:mm')}, ${e.bossName}`)
         .join(',\r\n');
-    bot.sendMessage({
-        to: channelID,
-        message: `${weekDays[now().clone().add(1, 'days').weekday()]}:\r\n${announcementMessage}`
-    }, (err, resp) => handleCallback(err, resp));
-};
 
-const handleCallback = function (err, resp) {
-    logger.info(`sendMessage response -> ${resp}`);
-    handleError(err);
-};
-
-const handleError = function (err) {
-    if (!err)
-        return;
-
-    logger.error(`sendMessage error -> ${err}`);
-    if (!!err.response && !!err.response.content)
-        err.response.content.forEach(e => logger.error(`error content -> ${e}`));
+    _messager.send(channelID, `${weekDays[now().clone().add(1, 'days').weekday()]}:\r\n${announcementMessage}`);
 };
 
 const handleReady = function (evt) {
@@ -183,58 +152,7 @@ const handleReady = function (evt) {
     logger.info('Logged in as: ');
     logger.info(bot.username + ' - (' + bot.id + ')');
 
-    bot.sendMessage({
-        to: defaultChannelID,
-        message: `Hi!\r\nType \'!help\' to see available commands.`
-    }, (err, resp) => handleCallback(err, resp));
-
-    launchAnnouncements();
-};
-
-const launchAnnouncements = function () {
-    emitter.on('bossUp', () => {
-        logger.info('bossUp');
-        var alerts = getUpcomingBossAlerts();
-
-        if (alerts && alerts.length > 0) {
-            alerts.forEach(alert => bot.sendMessage({
-                to: defaultChannelID,
-                message: alert
-            }, (err, resp) => handleCallback(err, resp)));
-        }
-    });
-
-    let timeout = ((60 - moment().seconds() + 1) * 1000);
-    logger.info(`Timeout: ${timeout}`);
-
-    setTimeout(() => {
-        logger.info(`start interval at ${moment().seconds()}`);
-        setInterval(() => emitter.emit('bossUp'), 60000);
-    }, timeout);
-};
-
-const getUpcomingBossAlerts = function () {
-    var messages = [];
-    bossTimers
-        .filter(bt => bt.weekDay === now().day())
-        .forEach(bossTimer => {
-            let nowTime = bossTimer.time.tz("Europe/Moscow");
-            let firstTime = bossTimer.time.tz("Europe/Moscow").clone().subtract(firstDelay, 'minutes');
-            let secondTime = bossTimer.time.tz("Europe/Moscow").clone().subtract(secondDelay, 'minutes');
-            if (firstTime.hours() === now().hours()
-                && firstTime.minutes() === now().minutes()) {
-                messages.push(`@here ${bossTimer.bossName} через ${firstDelay} минут!`);
-            }
-            if (secondTime.hours() === now().hours()
-                && secondTime.minutes() === now().minutes()) {
-                messages.push(`@here ${bossTimer.bossName} через ${secondDelay} минут!`);
-            }
-            if (nowTime.hours() === now().hours()
-                && nowTime.minutes() === now().minutes()) {
-                messages.push(`@here ${bossTimer.bossName} реснулся!`);
-            } 
-        });
-    return messages;
+    _alertService.setupAlerts();
 };
 
 const addBoss = function (weekDay, time, bossName) {
