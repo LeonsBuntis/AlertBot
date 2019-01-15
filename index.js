@@ -5,9 +5,9 @@ const EventEmitter = require('events');
 
 const auth = require('./auth.json');
 
-const weekDays = require('./weekDays.js');
-const BossTimer = require('./BossTimer.js');
-const bossTimers = require('./bossTimers.js');
+const weekDays = require('./app/weekDays.js');
+const BossTimer = require('./app/BossTimer.js');
+const bossTimers = require('./app/bossTimers.js');
 
 const logger = winston.createLogger({
     level: 'info',
@@ -121,7 +121,7 @@ const handleMessage = function (user, userID, channelID, message, evt) {
                 break;
         }
     }
-}
+};
 
 const handleHelpCommand = function (channelID) {
     let message = availableCommands
@@ -133,14 +133,14 @@ const handleHelpCommand = function (channelID) {
         to: channelID,
         message: message
     }, (err, resp) => handleCallback(err, resp));
-}
+};
 
 const handleTimeCommand = function (channelID) {
     bot.sendMessage({
         to: channelID,
         message: now()
     }, (err, resp) => handleCallback(err, resp));
-}
+};
 
 const handleTodayCommand = function (channelID) {
     let announcementMessage = bossTimers
@@ -167,7 +167,7 @@ const handleTomorrowCommand = function (channelID) {
 const handleCallback = function (err, resp) {
     logger.info(`sendMessage response -> ${resp}`);
     handleError(err);
-}
+};
 
 const handleError = function (err) {
     if (!err)
@@ -176,7 +176,7 @@ const handleError = function (err) {
     logger.error(`sendMessage error -> ${err}`);
     if (!!err.response && !!err.response.content)
         err.response.content.forEach(e => logger.error(`error content -> ${e}`));
-}
+};
 
 const handleReady = function (evt) {
     logger.info('Connected');
@@ -189,7 +189,7 @@ const handleReady = function (evt) {
     }, (err, resp) => handleCallback(err, resp));
 
     launchAnnouncements();
-}
+};
 
 const launchAnnouncements = function () {
     emitter.on('bossUp', () => {
@@ -211,7 +211,7 @@ const launchAnnouncements = function () {
         logger.info(`start interval at ${moment().seconds()}`);
         setInterval(() => emitter.emit('bossUp'), 60000);
     }, timeout);
-}
+};
 
 const getUpcomingBossAlerts = function () {
     var messages = [];
@@ -235,9 +235,9 @@ const getUpcomingBossAlerts = function () {
             } 
         });
     return messages;
-}
+};
 
 const addBoss = function (weekDay, time, bossName) {
     let bossTimer = new BossTimer(weekDay, time, bossName);
     bossTimers.push(bossTimer);
-}
+};
