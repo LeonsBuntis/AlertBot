@@ -1,0 +1,58 @@
+const moment = require('moment-timezone');
+
+module.exports = bossTimers = [
+    { weekDay: 1, time: moment.tz('01:00', 'HH:mm', "Europe/Moscow"), bossName: 'Нубэр' },
+    { weekDay: 1, time: moment.tz('12:00', 'HH:mm', "Europe/Moscow"), bossName: 'Древний Кутум' },
+    { weekDay: 1, time: moment.tz('14:00', 'HH:mm', "Europe/Moscow"), bossName: 'Нубэр' },
+    { weekDay: 1, time: moment.tz('16:00', 'HH:mm', "Europe/Moscow"), bossName: 'Каранда' },
+    { weekDay: 1, time: moment.tz('18:00', 'HH:mm', "Europe/Moscow"), bossName: 'Древний Кутум' },
+    { weekDay: 1, time: moment.tz('21:30', 'HH:mm', "Europe/Moscow"), bossName: 'Нубэр | Каранда' },
+    { weekDay: 1, time: moment.tz('23:30', 'HH:mm', "Europe/Moscow"), bossName: 'Продажный правитель Кзарка' },
+    
+    { weekDay: 2, time: moment.tz('01:00', 'HH:mm', "Europe/Moscow"), bossName: 'Каранда' },
+    { weekDay: 2, time: moment.tz('12:00', 'HH:mm', "Europe/Moscow"), bossName: 'Каранда' },
+    { weekDay: 2, time: moment.tz('14:00', 'HH:mm', "Europe/Moscow"), bossName: 'Продажный правитель Кзарка' },
+    { weekDay: 2, time: moment.tz('16:00', 'HH:mm', "Europe/Moscow"), bossName: 'Древний Кутум' },
+    { weekDay: 2, time: moment.tz('18:00', 'HH:mm', "Europe/Moscow"), bossName: 'Каранда' },
+    { weekDay: 2, time: moment.tz('23:30', 'HH:mm', "Europe/Moscow"), bossName: 'Древний Кутум' },
+    
+    { weekDay: 3, time: moment.tz('01:00', 'HH:mm', "Europe/Moscow"), bossName: 'Нубэр' },
+    { weekDay: 3, time: moment.tz('14:00', 'HH:mm', "Europe/Moscow"), bossName: 'Каранда' },
+    { weekDay: 3, time: moment.tz('16:00', 'HH:mm', "Europe/Moscow"), bossName: 'Нубэр' },
+    { weekDay: 3, time: moment.tz('18:00', 'HH:mm', "Europe/Moscow"), bossName: 'Продажный правитель Кзарка' },
+    { weekDay: 3, time: moment.tz('21:30', 'HH:mm', "Europe/Moscow"), bossName: 'Офин-разрушитель' },
+    { weekDay: 3, time: moment.tz('23:30', 'HH:mm', "Europe/Moscow"), bossName: 'Каранда' },
+    
+    { weekDay: 4, time: moment.tz('01:00', 'HH:mm', "Europe/Moscow"), bossName: 'Древний Кутум' },
+    { weekDay: 4, time: moment.tz('12:00', 'HH:mm', "Europe/Moscow"), bossName: 'Нубэр' },
+    { weekDay: 4, time: moment.tz('14:00', 'HH:mm', "Europe/Moscow"), bossName: 'Древний Кутум' },
+    { weekDay: 4, time: moment.tz('16:00', 'HH:mm', "Europe/Moscow"), bossName: 'Нубэр' },
+    { weekDay: 4, time: moment.tz('18:00', 'HH:mm', "Europe/Moscow"), bossName: 'Продажный правитель Кзарка' },
+    { weekDay: 4, time: moment.tz('23:30', 'HH:mm', "Europe/Moscow"), bossName: 'Нубэр' },
+    
+    { weekDay: 5, time: moment.tz('01:00', 'HH:mm', "Europe/Moscow"), bossName: 'Продажный правитель Кзарка' },
+    { weekDay: 5, time: moment.tz('12:00', 'HH:mm', "Europe/Moscow"), bossName: 'Каранда' },
+    { weekDay: 5, time: moment.tz('14:00', 'HH:mm', "Europe/Moscow"), bossName: 'Древний Кутум' },
+    { weekDay: 5, time: moment.tz('16:00', 'HH:mm', "Europe/Moscow"), bossName: 'Нубэр' },
+    { weekDay: 5, time: moment.tz('18:00', 'HH:mm', "Europe/Moscow"), bossName: 'Продажный правитель Кзарка' },
+    { weekDay: 5, time: moment.tz('21:30', 'HH:mm', "Europe/Moscow"), bossName: 'Офин-разрушитель' },
+    { weekDay: 5, time: moment.tz('23:30', 'HH:mm', "Europe/Moscow"), bossName: 'Продажный правитель Кзарка | Нубэр' },
+    
+    { weekDay: 6, time: moment.tz('01:00', 'HH:mm', "Europe/Moscow"), bossName: 'Древний Кутум' },
+    { weekDay: 6, time: moment.tz('08:00', 'HH:mm', "Europe/Moscow"), bossName: 'Продажный правитель Кзарка' },
+    { weekDay: 6, time: moment.tz('10:00', 'HH:mm', "Europe/Moscow"), bossName: 'Нубэр' },
+    { weekDay: 6, time: moment.tz('12:00', 'HH:mm', "Europe/Moscow"), bossName: 'Древний Кутум' },
+    { weekDay: 6, time: moment.tz('14:00', 'HH:mm', "Europe/Moscow"), bossName: 'Квинт | Мурака' },
+    { weekDay: 6, time: moment.tz('16:00', 'HH:mm', "Europe/Moscow"), bossName: 'Каранда' },
+    { weekDay: 6, time: moment.tz('18:00', 'HH:mm', "Europe/Moscow"), bossName: 'Древний Кутум' },
+    
+    { weekDay: 7, time: moment.tz('01:00', 'HH:mm', "Europe/Moscow"), bossName: 'Продажный правитель Кзарка' },
+    { weekDay: 7, time: moment.tz('08:00', 'HH:mm', "Europe/Moscow"), bossName: 'Каранда' },
+    { weekDay: 7, time: moment.tz('10:00', 'HH:mm', "Europe/Moscow"), bossName: 'Древний Кутум' },
+    { weekDay: 7, time: moment.tz('12:00', 'HH:mm', "Europe/Moscow"), bossName: 'Продажный правитель Кзарка' },
+    { weekDay: 7, time: moment.tz('14:00', 'HH:mm', "Europe/Moscow"), bossName: 'Древний Кутум' },
+    { weekDay: 7, time: moment.tz('16:00', 'HH:mm', "Europe/Moscow"), bossName: 'ВЕЛЛ' },
+    { weekDay: 7, time: moment.tz('18:00', 'HH:mm', "Europe/Moscow"), bossName: 'Продажный правитель Кзарка | Нубэр' },
+    { weekDay: 7, time: moment.tz('21:30', 'HH:mm', "Europe/Moscow"), bossName: 'Офин-разрушитель' },
+    { weekDay: 7, time: moment.tz('23:30', 'HH:mm', "Europe/Moscow"), bossName: 'Продажный правитель Кзарка | Каранда' },
+];
