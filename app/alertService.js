@@ -10,7 +10,7 @@ class alertService {
         this._messager = messager;
 
         this._alertSubscribers = [
-            // "533996920780357652",   // FAKEL
+            "533996920780357652",   // FAKEL
             "534287393272889346"    // TEST
         ];
         this._firstDelay = 20;
@@ -19,11 +19,14 @@ class alertService {
     }
 
     addSubscriber(channelId) {
-        this._alertSubscribers.push(channelId);
+        if (!this._alertSubscribers.indexOf(channelId))
+            this._alertSubscribers.push(channelId);
     }
 
     removeSubscriber(channelId) {
-        this._alertSubscribers.splice(this._alertSubscribers.indexOf(channelId), 1);
+        let removeIndex = this._alertSubscribers.indexOf(channelId);
+        if (!!removeIndex)
+            this._alertSubscribers.splice(removeIndex, 1);
     }
 
     getUpcomingBossAlerts() {

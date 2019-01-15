@@ -5,7 +5,8 @@ const bossTimers = require('./bossTimers.js');
 
 class messageHandlerService {
 
-    constructor(logger, messager) {
+    constructor(logger, messager, alertService) {
+        this._alertService = alertService;
         this._messager = messager;
         this._logger = logger;
         this.availableCommands = [
@@ -75,11 +76,11 @@ class messageHandlerService {
                 this.handleTimeCommand(channelID);
                 break;
             case 'mute':
-                _alertService.removeSubscriber(channelID);
+                this._alertService.removeSubscriber(channelID);
                 this._messager.send(channelID, `I ain't gonna spam here no more.`);
                 break;
             case 'subscribe':
-                _alertService.addSubscriber(channelID);
+                this._alertService.addSubscriber(channelID);
                 this._messager.send(channelID, `This is the channel where ama bout to spam!`);
                 break;
             case 'weekDays':

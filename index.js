@@ -29,7 +29,7 @@ const bot = new Discord.Client({
 
 const _messager = new messager(logger, bot);
 const _alertService = new alertService(logger, _messager);
-const _messageHandlerService = new messageHanlderService(logger, _messager);
+const _messageHandlerService = new messageHanlderService(logger, _messager, _alertService);
 
 bot.on('ready', function (evt) {
     handleReady(evt);
