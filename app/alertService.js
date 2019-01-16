@@ -15,7 +15,7 @@ class alertService {
         ];
         this._firstDelay = 20;
         this._secondDelay = 10;
-        this._now = () => moment().utc();
+        this._now = () => moment().tz("Europe/Moscow");
     }
 
     addSubscriber(channelId) {
@@ -40,9 +40,9 @@ class alertService {
         bossTimers
             .filter(bt => bt.weekDay === this._now().day())
             .forEach(bossTimer => {
-                let nowTime = bossTimer.time.utc();
-                let firstTime = bossTimer.time.clone().subtract(this._firstDelay, 'minutes').utc();
-                let secondTime = bossTimer.time.clone().subtract(this._secondDelay, 'minutes').utc();
+                let nowTime = bossTimer.time.tz("Europe/Moscow");
+                let firstTime = bossTimer.time.clone().subtract(this._firstDelay, 'minutes').tz("Europe/Moscow");
+                let secondTime = bossTimer.time.clone().subtract(this._secondDelay, 'minutes').tz("Europe/Moscow");
                 if (firstTime.hours() === this._now().hours() &&
                     firstTime.minutes() === this._now().minutes()) {
                     messages.push(`@here ${bossTimer.bossName} через ${this._firstDelay} минут!`);
