@@ -41,8 +41,8 @@ class alertService {
             .filter(bt => bt.weekDay === this._now().day())
             .forEach(bossTimer => {
                 let nowTime = bossTimer.time.tz("Europe/Moscow");
-                let firstTime = bossTimer.time.clone().subtract(this._firstDelay, 'minutes').tz("Europe/Moscow");
-                let secondTime = bossTimer.time.clone().subtract(this._secondDelay, 'minutes').tz("Europe/Moscow");
+                let firstTime = bossTimer.time.tz("Europe/Moscow").clone().subtract(this._firstDelay, 'minutes');
+                let secondTime = bossTimer.time.tz("Europe/Moscow").clone().subtract(this._secondDelay, 'minutes');
                 if (firstTime.hours() === this._now().hours() &&
                     firstTime.minutes() === this._now().minutes()) {
                     messages.push(`@here ${bossTimer.bossName} через ${this._firstDelay} минут!`);
