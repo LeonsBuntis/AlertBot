@@ -16,6 +16,13 @@ class alertService {
         this._firstDelay = 20;
         this._secondDelay = 10;
         this._now = () => moment().tz("Europe/Moscow");
+
+        this.respMessages = [
+            "туть",
+            "здесь",
+            "здеся",
+            "на месте"
+        ];
     }
 
     addSubscriber(channelId) {
@@ -45,18 +52,23 @@ class alertService {
                 let secondTime = bossTimer.time.tz("Europe/Moscow").clone().subtract(this._secondDelay, 'minutes');
                 if (firstTime.hours() === this._now().hours() &&
                     firstTime.minutes() === this._now().minutes()) {
-                    messages.push(`@here ${bossTimer.bossName} через ${this._firstDelay} минут!`);
+                    messages.push(`${bossTimer.bossName} через ${this._firstDelay} минут!`);
                 }
                 if (secondTime.hours() === this._now().hours() &&
                     secondTime.minutes() === this._now().minutes()) {
-                    messages.push(`@here ${bossTimer.bossName} через ${this._secondDelay} минут!`);
+                    messages.push(`${bossTimer.bossName} через ${this._secondDelay} минут!`);
                 }
                 if (nowTime.hours() === this._now().hours() &&
                     nowTime.minutes() === this._now().minutes()) {
-                    messages.push(`@here ${bossTimer.bossName} реснулся!`);
+                    let respMessage = getRandomRespMessage();
+                    messages.push(`${bossTimer.bossName} ${respMessage}!`);
                 }
             });
         return messages;
+    }
+
+    getRandomRespMessage() {
+        
     }
 
     setupAlerts() {
