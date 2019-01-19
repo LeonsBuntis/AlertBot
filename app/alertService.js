@@ -17,7 +17,7 @@ class alertService {
         this._secondDelay = 10;
         this._now = () => moment().tz("Europe/Moscow");
 
-        this.respMessages = [
+        this._respMessages = [
             "туть",
             "здесь",
             "здеся",
@@ -68,7 +68,8 @@ class alertService {
     }
 
     getRandomRespMessage() {
-        
+        let rndIndex = Math.floor(Math.random() * this._respMessages.length);
+        return this._respMessages[rndIndex];
     }
 
     setupAlerts() {
