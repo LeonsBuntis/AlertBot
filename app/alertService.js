@@ -60,7 +60,7 @@ class alertService {
                 }
                 if (nowTime.hours() === this._now().hours() &&
                     nowTime.minutes() === this._now().minutes()) {
-                    let respMessage = getRandomRespMessage();
+                    let respMessage = this.getRandomRespMessage();
                     messages.push(`${bossTimer.bossName} ${respMessage}!`);
                 }
             });
