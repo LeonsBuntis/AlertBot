@@ -1,5 +1,9 @@
 const Discord = require('discord.io');
+const moment = require('moment-timezone');
 const winston = require('winston');
+const { format } = winston;
+const { combine, timestamp, prettyPrint } = format;
+require('winston-daily-rotate-file');
 
 const auth = require('./auth.json');
 
@@ -7,13 +11,25 @@ const messageHanlderService = require('./app/messageHandlerService.js');
 const alertService = require('./app/alertService.js');
 const messager = require('./app/messager.js');
 
+var transport = new (winston.transports.DailyRotateFile)({
+    filename: 'application-%DATE%.log',
+    datePattern: 'YYYY-MM-DD-HH',
+    zippedArchive: true,
+    maxSize: '20m',
+    maxFiles: '14d'
+  });
+
 const logger = winston.createLogger({
     level: 'info',
-    format: winston.format.json(),
+    format: combine(
+        timestamp(),
+        prettyPrint()
+      ),
     defaultMeta: { service: 'user-service' },
     transports: [
         new winston.transports.File({ filename: 'error.log', level: 'error' }),
-        new winston.transports.File({ filename: 'combined.log' })
+        new winston.transports.File({ filename: `combined.log` }),
+        transport
     ]
 });
 

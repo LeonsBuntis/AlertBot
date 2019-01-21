@@ -15,7 +15,7 @@ class messager {
     }
 
     handleCallback(err, resp) {
-        this._logger.info(`sendMessage response -> ${resp}`);
+        this._logger.info(`sendMessage response -> ${JSON.stringify(resp)}`);
         this.handleError(err);
     }
 

@@ -74,7 +74,7 @@ class alertService {
 
     setupAlerts() {
         this._emitter.on('checkAlerts', () => {
-            this._logger.debug(`${this._now().format()} checkAlerts!`);
+            this._logger.info(`${this._now().format()} checkAlerts!`);
 
             if (!this._alertSubscribers || this._alertSubscribers.length === 0) {
                 this._logger.info(`No subscribers!`);
